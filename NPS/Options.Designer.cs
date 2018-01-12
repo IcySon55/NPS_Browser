@@ -70,6 +70,9 @@ namespace NPS
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkUnpackToOwnDirectory = new System.Windows.Forms.CheckBox();
+            this.txtUnpackToOwnDirectory = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -480,9 +483,41 @@ namespace NPS
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Games";
             // 
+            // chkUnpackToOwnDirectory
+            // 
+            this.chkUnpackToOwnDirectory.AutoSize = true;
+            this.chkUnpackToOwnDirectory.Location = new System.Drawing.Point(371, 380);
+            this.chkUnpackToOwnDirectory.Name = "chkUnpackToOwnDirectory";
+            this.chkUnpackToOwnDirectory.Size = new System.Drawing.Size(226, 17);
+            this.chkUnpackToOwnDirectory.TabIndex = 31;
+            this.chkUnpackToOwnDirectory.Text = "Unpack VITA games to their own directory";
+            this.chkUnpackToOwnDirectory.UseVisualStyleBackColor = true;
+            this.chkUnpackToOwnDirectory.CheckedChanged += new System.EventHandler(this.chkUnpackToOwnDirectory_CheckedChanged);
+            // 
+            // txtUnpackToOwnDirectory
+            // 
+            this.txtUnpackToOwnDirectory.Enabled = false;
+            this.txtUnpackToOwnDirectory.Location = new System.Drawing.Point(371, 401);
+            this.txtUnpackToOwnDirectory.Name = "txtUnpackToOwnDirectory";
+            this.txtUnpackToOwnDirectory.Size = new System.Drawing.Size(209, 20);
+            this.txtUnpackToOwnDirectory.TabIndex = 32;
+            this.txtUnpackToOwnDirectory.Text = "{gameTitle} ({region}) [{titleID}]";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(279, 404);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(86, 13);
+            this.label13.TabIndex = 33;
+            this.label13.Text = "Directory params";
+            // 
             // Options
             // 
             this.ClientSize = new System.Drawing.Size(600, 427);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.txtUnpackToOwnDirectory);
+            this.Controls.Add(this.chkUnpackToOwnDirectory);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonImport);
             this.Controls.Add(this.buttonExport);
@@ -567,6 +602,9 @@ namespace NPS
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox chkUnpackToOwnDirectory;
+        private System.Windows.Forms.TextBox txtUnpackToOwnDirectory;
+        private System.Windows.Forms.Label label13;
     }
 }
 

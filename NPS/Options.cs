@@ -1,22 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using System.Net;
-using Microsoft.Win32;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 
 namespace NPS
 {
     public partial class Options : Form
     {
-
-
         public Options()
         {
             InitializeComponent();
@@ -35,6 +25,7 @@ namespace NPS
             textBox1.Text = Settings.Instance.GamesUri;
             textBox2.Text = Settings.Instance.DLCUri;
             checkBox1.Checked = Settings.Instance.deleteAfterUnpack;
+            chkUnpackToOwnDirectory.Checked = Settings.Instance.unpackToOwnDirectory;
             numericUpDown1.Value = Settings.Instance.simultaneousDl;
             textBox3.Text = Settings.Instance.PSMUri;
             textBox4.Text = Settings.Instance.PSXUri;
@@ -42,6 +33,7 @@ namespace NPS
             textBox6.Text = Settings.Instance.PSPDLCUri;
             tb_ps3uri.Text = Settings.Instance.PS3Uri;
             tb_ps3dlcuri.Text = Settings.Instance.PS3DLCUri;
+            txtUnpackToOwnDirectory.Text = Settings.Instance.unpackToOwnDirectoryParams;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -97,6 +89,7 @@ namespace NPS
             Settings.Instance.PSPDLCUri = textBox6.Text;
             Settings.Instance.PS3Uri = tb_ps3uri.Text;
             Settings.Instance.PS3DLCUri = tb_ps3dlcuri.Text;
+            Settings.Instance.unpackToOwnDirectoryParams = txtUnpackToOwnDirectory.Text;
             if (withStoring)
                 Settings.Instance.Store();
         }
@@ -206,7 +199,6 @@ namespace NPS
 
         private void button_import(object sender, EventArgs e)
         {
-
             using (var fbd = new OpenFileDialog())
             {
                 fbd.Filter = "|*.npsSettings";
@@ -225,8 +217,12 @@ namespace NPS
                     }
                 }
             }
+        }
 
-
+        private void chkUnpackToOwnDirectory_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Instance.unpackToOwnDirectory = chkUnpackToOwnDirectory.Checked;
+            txtUnpackToOwnDirectory.Enabled = chkUnpackToOwnDirectory.Checked;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.IO;
+using System.Security.Policy;
 
 [System.Serializable]
 public class Settings
@@ -15,9 +16,9 @@ public class Settings
     public string pkgParams;
     public string GamesUri, DLCUri, PSMUri, PSXUri, PSPUri, PSPDLCUri, PS3Uri, PS3DLCUri;
     public bool deleteAfterUnpack = false;
+    public bool unpackToOwnDirectory = false;
+    public string unpackToOwnDirectoryParams = "{gameTitle} ({region}) [{titleID}]";
     public int simultaneousDl = 2;
-
-
 
 
     public Settings()
@@ -48,6 +49,14 @@ public class Settings
         if (!string.IsNullOrEmpty(deleteAfterUnpackString))
             bool.TryParse(deleteAfterUnpackString, out deleteAfterUnpack);
         else deleteAfterUnpack = true;
+
+        string unpackToOwnDirectoryString = Registry.GetValue(keyName, "unpackToOwnDirectory", false)?.ToString();
+
+        if (!string.IsNullOrEmpty(unpackToOwnDirectoryString))
+            bool.TryParse(unpackToOwnDirectoryString, out unpackToOwnDirectory);
+        else unpackToOwnDirectory = false;
+
+        unpackToOwnDirectoryParams = Registry.GetValue(keyName, "unpackToOwnDirectoryParams", "")?.ToString();
 
         if (pkgParams == null) pkgParams = "-x {pkgFile} \"{zRifKey}\"";
     }
@@ -82,12 +91,10 @@ public class Settings
             Registry.SetValue(keyName, "PS3DLCUri", PS3DLCUri);
 
         Registry.SetValue(keyName, "deleteAfterUnpack", deleteAfterUnpack);
-
+        Registry.SetValue(keyName, "unpackToOwnDirectory", unpackToOwnDirectory);
+        if (unpackToOwnDirectoryParams != null)
+            Registry.SetValue(keyName, "unpackToOwnDirectoryParams", unpackToOwnDirectoryParams);
 
         Registry.SetValue(keyName, "simultaneousDl", simultaneousDl);
     }
 }
-
-
-
-

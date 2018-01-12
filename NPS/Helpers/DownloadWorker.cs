@@ -176,31 +176,37 @@ namespace NPS
 
             if (this.status == WorkerStatus.Downloaded || this.status == WorkerStatus.Completed)
             {
-
                 lvi.SubItems[2].Text = "Unpacking";
-
 
                 var replacements = new Dictionary<string, string>
                 {
                     ["{pkgfile}"] = "\"" + Path.Combine(Settings.Instance.downloadDir, currentDownload.DownloadFileName + ".pkg") + "\"",
                     ["{titleid}"] = currentDownload.TitleId.Substring(0, 9),
-                    ["{gametitle}"] = Regex.Replace(currentDownload.IsDLC ? currentDownload.ParentGameTitle : currentDownload.TitleName, "[/:\" *?<>|\\r\\n]+", string.Empty),
+                    ["{gametitle}"] = Regex.Replace(currentDownload.IsDLC ? currentDownload.ParentGameTitle : currentDownload.TitleName, "[/:\"*?<>|\\r\\n]+", string.Empty),
                     ["{region}"] = currentDownload.Region,
                     ["{zrifkey}"] = currentDownload.zRif
                 };
 
-                ProcessStartInfo a = new ProcessStartInfo();
-                a.WorkingDirectory = Settings.Instance.downloadDir + Path.DirectorySeparatorChar;
-                a.FileName = string.Format("\"{0}\"", Settings.Instance.pkgPath);
-                a.WindowStyle = ProcessWindowStyle.Hidden;
-                a.CreateNoWindow = true;
-                a.Arguments = replacements.Aggregate(Settings.Instance.pkgParams.ToLower(), (str, rep) => str.Replace(rep.Key, rep.Value));
+                string downloadDir = Settings.Instance.downloadDir + Path.DirectorySeparatorChar;
+
+                if (Settings.Instance.unpackToOwnDirectory)
+                    downloadDir = Settings.Instance.downloadDir + Path.DirectorySeparatorChar + replacements.Aggregate(Settings.Instance.unpackToOwnDirectoryParams.ToLower(), (str, rep) => str.Replace(rep.Key, rep.Value)) + Path.DirectorySeparatorChar;
+
+                if (!Directory.Exists(downloadDir))
+                    Directory.CreateDirectory(downloadDir);
+
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.WorkingDirectory = downloadDir;
+                psi.FileName = string.Format("\"{0}\"", Settings.Instance.pkgPath);
+                psi.WindowStyle = ProcessWindowStyle.Hidden;
+                psi.CreateNoWindow = true;
+                psi.Arguments = replacements.Aggregate(Settings.Instance.pkgParams.ToLower(), (str, rep) => str.Replace(rep.Key, rep.Value));
 
                 unpackProcess = new Process();
-                unpackProcess.StartInfo = a;
+                unpackProcess.StartInfo = psi;
 
-                a.UseShellExecute = false;
-                a.RedirectStandardError = true;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardError = true;
 
                 unpackProcess.EnableRaisingEvents = true;
                 unpackProcess.Exited += Proc_Exited;
